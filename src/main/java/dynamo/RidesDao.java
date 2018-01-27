@@ -1,21 +1,25 @@
 package dynamo;
 
+
 import java.util.Arrays;
 import java.util.HashMap;
+
 import java.util.Map;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
+
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
+
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.amazonaws.services.dynamodbv2.document.Item;
 
@@ -64,6 +68,37 @@ public class RidesDao {
     	System.out.print("TEST");
     }
     
+    
+    public void TestFunc1(int n1, String n2) {
+    	
+    	dbClient = AmazonDynamoDBClientBuilder.standard()
+                .withRegion(Regions.US_EAST_2)
+                .build();
+    	dynamoDB = new DynamoDB(dbClient);
+
+    		Table table = dynamoDB.getTable("Test");
+        int year = n1;
+        String title = n2;
+
+        final Map<String, Object> infoMap = new HashMap<String, Object>();
+        infoMap.put(n2, n1);
+
+        try {
+            System.out.println("Adding a new item...");
+            PutItemOutcome outcome = table
+                .putItem(new Item().withPrimaryKey("Email", "lol@gmail.com", "Name", title).withMap("info", infoMap));
+
+            System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
+
+        }
+        catch (Exception e) {
+            System.err.println("Unable to add item: " + year + " " + title);
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    
+    
     public void TestFunc(int n1, String n2) {
     	
     	dbClient = AmazonDynamoDBClientBuilder.standard()
@@ -78,6 +113,7 @@ public class RidesDao {
         final Map<String, Object> infoMap = new HashMap<String, Object>();
         infoMap.put("plot", "Nothing happens at all.");
         infoMap.put("rating", 0);
+        infoMap.put(n2, n1);
 
         try {
             System.out.println("Adding a new item...");
