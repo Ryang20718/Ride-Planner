@@ -12,8 +12,10 @@ public class Playground {
 
         RidesDao dao = new RidesDao();
         dao.insert();
-        dao.TestFunc(10, "Lighthouse");
-        dao.TestFunc1(11, "Light");
+        dao.TestInsert("test@gmail.com", "test", "CCAC");
+        dao.TestRead("test@gmail.com", "test");
+        dao.TestUpdate("test@gmail.com", "test", "Lighthouse");
+        //dao.TestRead("ryan@gmail.com", "Kevin");
         System.out.println("hello");
     }
 }

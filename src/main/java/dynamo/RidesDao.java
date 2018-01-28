@@ -13,13 +13,16 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
-
+import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
+import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-
+import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.amazonaws.services.dynamodbv2.document.Item;
 
@@ -69,7 +72,7 @@ public class RidesDao {
     }
     
     
-    public void TestFunc1(int n1, String n2) {
+    public void TestInsert(String email, String name, String church) {
     	
     	dbClient = AmazonDynamoDBClientBuilder.standard()
                 .withRegion(Regions.US_EAST_2)
@@ -77,29 +80,28 @@ public class RidesDao {
     	dynamoDB = new DynamoDB(dbClient);
 
     		Table table = dynamoDB.getTable("Test");
-        int year = n1;
-        String title = n2;
 
         final Map<String, Object> infoMap = new HashMap<String, Object>();
-        infoMap.put(n2, n1);
+        infoMap.put("email", email);
+        infoMap.put("church", church);
 
         try {
             System.out.println("Adding a new item...");
             PutItemOutcome outcome = table
-                .putItem(new Item().withPrimaryKey("Email", "lol@gmail.com", "Name", title).withMap("info", infoMap));
+                .putItem(new Item().withPrimaryKey("Email", email, "Name", name).withMap("info", infoMap));
 
             System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
 
         }
         catch (Exception e) {
-            System.err.println("Unable to add item: " + year + " " + title);
+            System.err.println("Unable to add item: " + email + " " + name);
             System.err.println(e.getMessage());
         }
     }
     
     
     
-    public void TestFunc(int n1, String n2) {
+    public void TestInsert1(int n1, String n2) {
     	
     	dbClient = AmazonDynamoDBClientBuilder.standard()
                 .withRegion(Regions.US_EAST_2)
@@ -113,6 +115,7 @@ public class RidesDao {
         final Map<String, Object> infoMap = new HashMap<String, Object>();
         infoMap.put("plot", "Nothing happens at all.");
         infoMap.put("rating", 0);
+        infoMap.put("Working", 0);
         infoMap.put(n2, n1);
 
         try {
@@ -125,6 +128,50 @@ public class RidesDao {
         }
         catch (Exception e) {
             System.err.println("Unable to add item: " + year + " " + title);
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    
+    
+    public void TestRead(String email, String name) {
+
+        Table table = dynamoDB.getTable("Test");
+
+
+        GetItemSpec spec = new GetItemSpec().withPrimaryKey("Email", email, "Name", name);
+
+        try {
+            System.out.println("Attempting to read the item...");
+            Item outcome = table.getItem(spec);
+            System.out.println("GetItem succeeded: " + outcome);
+
+        }
+        catch (Exception e) {
+            System.err.println("Unable to read item: " + email + " " + name);
+            System.err.println(e.getMessage());
+        }
+
+    }
+    
+    public void TestUpdate(String email, String name, String update) {
+        Table table = dynamoDB.getTable("Test");
+
+
+        UpdateItemSpec updateItemSpec = new UpdateItemSpec().withPrimaryKey("Email", email, "Name", name)
+            .withUpdateExpression("set info.email = :e, info.church=:c")
+            .withValueMap(new ValueMap().withString(":e", email).withString(":c", update)
+                )
+            .withReturnValues(ReturnValue.UPDATED_NEW);
+
+        try {
+            System.out.println("Updating the item...");
+            UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
+            System.out.println("UpdateItem succeeded:\n" + outcome.getItem().toJSONPretty());
+
+        }
+        catch (Exception e) {
+            System.err.println("Unable to update item: " + email + " " + name);
             System.err.println(e.getMessage());
         }
     }
