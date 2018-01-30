@@ -15,6 +15,9 @@ public class Playground {
         dao.TestInsert("test@gmail.com", "test", "CCAC");
         dao.TestRead("test@gmail.com", "test");
         dao.TestUpdate("test@gmail.com", "test", "Lighthouse");
+        dao.TestInsert("jZhu@gmail.com", "test", "CCAC");
+        dao.TestInsert("Smallberg@gmail.com", "David", "Immanuel");
+        dao.TestRead();
         //dao.TestRead("ryan@gmail.com", "Kevin");
         System.out.println("hello");
     }
