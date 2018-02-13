@@ -3,7 +3,7 @@ package dynamo;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.Map;
 
 
@@ -12,15 +12,13 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
-import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
-import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
+
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
-import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
-import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
+
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
-import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
+
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -32,7 +30,7 @@ import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+
 
 /**
  * Data accessor object for rides DynamoDB
@@ -51,6 +49,18 @@ public class RidesDao {
         dynamoDB = new DynamoDB(dbClient);   
     
 
+    }
+
+    
+    
+    
+    
+    public void createTable() {
+    	
+        dbClient = AmazonDynamoDBClientBuilder.standard()
+                .withRegion(Regions.US_EAST_2)
+                .build();
+        dynamoDB = new DynamoDB(dbClient);   
         String tableName = "RideTable";
 
         try {
@@ -70,9 +80,28 @@ public class RidesDao {
             System.err.println("Unable to create table: ");
             System.err.println(e.getMessage());
         }
-
     }
+    
+    
+    
+    public void deleteTable(String tableName) {
+        Table table = dynamoDB.getTable(tableName);
+        try {
+            System.out.println("Issuing DeleteTable request for " + tableName);
+            table.delete();
 
+            System.out.println("Waiting for " + tableName + " to be deleted...this may take a while...");
+
+            table.waitForDelete();
+        }
+        catch (Exception e) {
+            System.err.println("DeleteTable request failed for " + tableName);
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    
+    
     
     // Todo: Implement insert, update, read, readAll, delete
     public void insert() {
@@ -200,7 +229,27 @@ public class RidesDao {
         	    System.out.print(item);
     }
    
-    
+    }
+    /**
+     * ACTUAL FUNCTIONS FOR THE AACF 
+     */
+    public void insert(String email, String name, int year, String phoneNumber, String church, boolean attendance)
+    {
+    }
 
+    public void update(String email)
+    {
+    }
+
+    public void read(String email)
+    {
+    }
+
+    public void readAll()
+    {
+    }
+
+    public void delete(String email)
+    {
     }
 }
