@@ -282,9 +282,42 @@ dynamoDB = new DynamoDB(dbClient);
             System.err.println(e.getMessage());
         }
     }
-    public void insert(String email, String name, int year, String phoneNumber, String church, boolean attendance)
-    {
-    }
+	public void insert(String email, String name, int year, String phoneNumber, String church, boolean attendance) {
+		dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
+		dynamoDB = new DynamoDB(dbClient);
+		/*
+		 * Ryan's Region
+		 * 
+		 * dbClient = AmazonDynamoDBClientBuilder.standard()
+		 * .withRegion(Regions.US_EAST_2) .build(); dynamoDB = new DynamoDB(dbClient);
+		 */
+
+		Table table = dynamoDB.getTable("RideTable");
+
+		final Map<String, Object> infoMap = new HashMap<String, Object>();
+		infoMap.put("Email", email);
+		infoMap.put("Name", name);
+		infoMap.put("Church", church);
+		infoMap.put("year", year);
+		infoMap.put("Phone Number", phoneNumber);
+		if (attendance) { // attends or not
+			infoMap.put("attendance", "yes");
+		} else {
+			infoMap.put("attendance", "no");
+		}
+
+		try {
+			System.out.println("Adding a new item...");
+			PutItemOutcome outcome = table
+					.putItem(new Item().withPrimaryKey("Email", email, "Name", name).withMap("info", infoMap));
+
+			System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
+
+		} catch (Exception e) {
+			System.err.println("Unable to add item: " + email + " " + name);
+			System.err.println(e.getMessage());
+		}
+	}
 
     public void update(String email)
     {
