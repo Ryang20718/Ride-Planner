@@ -319,9 +319,23 @@ dynamoDB = new DynamoDB(dbClient);
 		}
 	}
 
-    public void update(String email)
-    {
-    }
+	public void update(String newEmail, String name, String oldEmail) {
+		Table table = dynamoDB.getTable("RideTable");
+
+		UpdateItemSpec updateItemSpec = new UpdateItemSpec().withPrimaryKey("Email", oldEmail, "Name", name)
+				.withUpdateExpression("set info.Email = :e").withValueMap(new ValueMap().withString(":e", newEmail))
+				.withReturnValues(ReturnValue.UPDATED_NEW);
+
+		try {
+			System.out.println("Updating the item...");
+			UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
+			System.out.println("UpdateItem succeeded:\n" + outcome.getItem().toJSONPretty());
+
+		} catch (Exception e) {
+			System.err.println("Unable to update item: " + oldEmail + " with the new email: " + newEmail);
+			System.err.println(e.getMessage());
+		}
+	}
 
     public void read(String email)
     {
