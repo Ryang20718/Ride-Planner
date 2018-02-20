@@ -15,6 +15,7 @@ import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
@@ -30,6 +31,7 @@ import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
 
 
 /**
@@ -337,15 +339,78 @@ dynamoDB = new DynamoDB(dbClient);
 		}
 	}
 
-    public void read(String email)
-    {
-    }
 
-    public void readAll()
-    {
-    }
+	public void read(String email, String name) {
+		dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
+		dynamoDB = new DynamoDB(dbClient);
+		/*
+		 * Ryan's Region
+		 * 
+		 * dbClient = AmazonDynamoDBClientBuilder.standard()
+		 * .withRegion(Regions.US_EAST_2) .build(); dynamoDB = new DynamoDB(dbClient);
+		 */
 
-    public void delete(String email)
-    {
-    }
+		Table table = dynamoDB.getTable("RideTable");
+		GetItemSpec spec = new GetItemSpec().withPrimaryKey("Email", email, "Name", name);
+
+		try {
+			System.out.println("Attempting to read the item...");
+			Item outcome = table.getItem(spec);
+			System.out.println("GetItem succeeded: " + outcome);
+
+		} catch (Exception e) {
+			System.err.println("Unable to read item: " + name);
+			System.err.println(e.getMessage());
+		}
+	}
+
+	public void readAll() {
+
+		dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
+		dynamoDB = new DynamoDB(dbClient);
+		/*
+		 * Ryan's Region
+		 * 
+		 * dbClient = AmazonDynamoDBClientBuilder.standard()
+		 * .withRegion(Regions.US_EAST_2) .build(); dynamoDB = new DynamoDB(dbClient);
+		 */
+
+		ScanRequest scanRequest = new ScanRequest().withTableName("RideTable");
+
+		ScanResult result = dbClient.scan(scanRequest);
+		for (Map<String, AttributeValue> item : result.getItems()) {
+			System.out.print(item);
+		}
+
+	}
+	
+
+	public void delete(String email, String name) {
+		dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
+		dynamoDB = new DynamoDB(dbClient);
+		/*
+		 * Ryan's Region
+		 * 
+		 * dbClient = AmazonDynamoDBClientBuilder.standard()
+		 * .withRegion(Regions.US_EAST_2) .build(); dynamoDB = new DynamoDB(dbClient);
+		 */
+
+		Table table = dynamoDB.getTable("RideTable");
+
+		DeleteItemSpec deleteItemSpec = new DeleteItemSpec()
+				.withPrimaryKey(new PrimaryKey("Email", email, "Name", name));
+
+		// Conditional delete (we expect this to fail)
+
+		try {
+			System.out.println("Attempting a conditional delete...");
+			table.deleteItem(deleteItemSpec);
+			System.out.println("DeleteItem succeeded");
+		} catch (Exception e) {
+			System.err.println("Unable to delete item: " + name);
+			System.err.println(e.getMessage());
+		}
+	}
+
+
 }
