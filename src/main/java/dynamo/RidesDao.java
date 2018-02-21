@@ -386,6 +386,8 @@ dynamoDB = new DynamoDB(dbClient);
 	
 
 	public void delete(String email, String name) {
+		
+		// Not My REgion
 		dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
 		dynamoDB = new DynamoDB(dbClient);
 		/*
