@@ -316,7 +316,7 @@ dynamoDB = new DynamoDB(dbClient);
 			System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
 
 		} catch (Exception e) {
-			System.err.println("Unable to add item: " + email + " " + name);
+			System.err.println("Unable to add " + name + " with email: " + email);
 			System.err.println(e.getMessage());
 		}
 	}
