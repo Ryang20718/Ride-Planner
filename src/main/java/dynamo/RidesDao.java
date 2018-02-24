@@ -305,7 +305,7 @@ dynamoDB = new DynamoDB(dbClient);
 		if (attendance) { // attends or not
 			infoMap.put("attendance", "yes");
 		} else {
-			infoMap.put("attendance", "no");
+			infoMap.put("attendance", "no");//might need to change every week
 		}
 
 		try {
