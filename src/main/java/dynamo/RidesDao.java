@@ -236,7 +236,7 @@ public class RidesDao {
      * ACTUAL FUNCTIONS FOR THE AACF 
      */
     public void createTable() {
-        dbClient = AmazonDynamoDBClientBuilder.standard()
+        dbClient = AmazonDynamoDBClientBuilder.standard()//OFFICIAL
                 .withRegion(Regions.US_WEST_1)
                 .build();
 dynamoDB = new DynamoDB(dbClient);   
@@ -285,7 +285,7 @@ dynamoDB = new DynamoDB(dbClient);
         }
     }
 	public void insert(String email, String name, int year, String phoneNumber, String church, boolean attendance) {
-		dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
+		dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();//OFFICIAL Region
 		dynamoDB = new DynamoDB(dbClient);
 		/*
 		 * Ryan's Region
