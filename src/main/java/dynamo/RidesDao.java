@@ -216,7 +216,7 @@ public class RidesDao {
     }
     
     public void TestRead() {
-
+//My Region
     	dbClient = AmazonDynamoDBClientBuilder.standard()
                 .withRegion(Regions.US_EAST_2)
                 .build();
