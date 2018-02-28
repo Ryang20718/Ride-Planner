@@ -18,7 +18,7 @@ public class RidesDaoTest {
 	private DynamoDB dynamoDB;
 	public String tableName = "RideTableTest";
 
-    public RidesDaoTest() {
+    public RidesDaoTest() {//Official region
         dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
         dynamoDB = new DynamoDB(dbClient);
     }
