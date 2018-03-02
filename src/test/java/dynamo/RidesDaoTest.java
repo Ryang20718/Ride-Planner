@@ -22,7 +22,7 @@ public class RidesDaoTest {
         dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
         dynamoDB = new DynamoDB(dbClient);
     }
-	
+	//creating table
 	public void createTable() {
 		try {
 			System.out.println("Attempting to create table; please wait...");
