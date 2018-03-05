@@ -16,7 +16,7 @@ import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 public class RidesDaoTest {
 	private AmazonDynamoDB dbClient;
 	private DynamoDB dynamoDB;
-	public String tableName = "RideTableTest";
+	public String tableName = "RideTableTest"; //name of table
 
     public RidesDaoTest() {//Official region
         dbClient = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_1).build();
