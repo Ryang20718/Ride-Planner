@@ -413,6 +413,35 @@ dynamoDB = new DynamoDB(dbClient);
 			System.err.println(e.getMessage());
 		}
 	}
+	public void insertOfficial(String email, String name, int year, String phoneNumber, String church, boolean attendance) {
+
+		Table table = dynamoDB.getTable("RideTableTest");
+
+		final Map<String, Object> infoMap = new HashMap<String, Object>();
+		infoMap.put("Email", email);
+		infoMap.put("Name", name);
+		infoMap.put("Church", church);
+		infoMap.put("Year", year);
+		infoMap.put("PhoneNumber", phoneNumber);
+		infoMap.put("Attendance", attendance);
+		infoMap.put("Driver", false);
+		infoMap.put("NumSeats", 0);
+		infoMap.put("Notes", " ");
+
+
+		try {
+			System.out.println("Adding a new item...");
+			PutItemOutcome outcome = table
+					.putItem(new Item().withPrimaryKey("Email", email).withMap("info", infoMap));
+
+			System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
+
+		} catch (Exception e) {
+			System.err.println("Unable to add " + email);
+			System.err.println(e.getMessage());
+		}
+	}
+
 
 
 }
