@@ -441,6 +441,49 @@ dynamoDB = new DynamoDB(dbClient);
 			System.err.println(e.getMessage());
 		}
 	}
+	/* Haven't pulled from RidesINfo
+	public void update(String email,RidesInfo object) {// use email & rideInfo object as parameter
+		Table table = dynamoDB.getTable("RideTableTest");
+		//These values are default since they don't necessarily have to be filled out at insertion
+		Boolean TempDriver = false;
+		Integer TempSeats = 0;
+		String TempNotes = "N/A";
+			
+		
+		if(object.getDriver() != null) {
+			TempDriver = object.getDriver();
+		}
+		if(object.getNumSeats() != null) {
+			TempSeats = object.getNumSeats();
+		}
+		if(object.getNotes() != null) {
+			TempNotes = object.getNotes();
+		}
+		
+
+		UpdateItemSpec updateItemSpec = new UpdateItemSpec().withPrimaryKey("Email", email)
+				.withUpdateExpression("set info.Email = :email, set info.Name = :name, set info.Church = :church,"
+				+ "set info.Year = :year, set info.PhoneNumber = :phoneNumber, set info.Attendance = :attendance,"
+				+ "set info.Driver = :driver, set info.NumSeats = :numSeats, set info.Notes = :notes")
+				.withValueMap(new ValueMap().withString(":email", object.getEmail())
+				.withString(":name", object.getName()).withString(":church", object.getChurch())
+				.withInt(":year", object.getYear()).withString(":phoneNumber", object.getPhoneNumber())
+				.withBoolean(":attendance", object.getCanAttend()).withBoolean(":driver", TempDriver)
+				.withInt(":numSeats", TempSeats).withString(":notes", TempNotes))
+				.withReturnValues(ReturnValue.UPDATED_NEW);
+		
+		
+		try {
+			System.out.println("Updating the item...");
+			UpdateItemOutcome outcome = table.updateItem(updateItemSpec);
+			System.out.println("UpdateItem succeeded:\n" + outcome.getItem().toJSONPretty());
+
+		} catch (Exception e) {
+			System.err.println("Unable to update "  + email + " properly");
+			System.err.println(e.getMessage());
+		}
+	}
+	*/
 
 
 
